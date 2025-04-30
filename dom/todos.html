@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <input id="task-input" type="text" placeholder="Nueva tarea" />
+  <button id="add-task">Agregar</button>
+  <ul id="task-list"></ul>
+
+  <script>
+
+    const input = document.getElementById("task-input");
+    const button = document.getElementById("add-task");
+    const list = document.getElementById("task-list");
+
+    let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+
+    function renderTasks() {
+      list.innerHTML = "";
+      tasks.forEach((task, index) => {
+        const li = document.createElement("li");
+        li.textContent = task;
+        li.addEventListener("click", () => {
+          tasks.splice(index, 1);
+          saveAndRender();
+        });
+        list.appendChild(li);
+      });
+    }
+
+    function saveAndRender() {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      renderTasks();
+    }
+
+    button.addEventListener("click", () => {
+      if (input.value.trim()) {
+        tasks.push(input.value.trim());
+        input.value = "";
+        saveAndRender();
+      }
+    });
+
+    renderTasks();
+  </script>
+
+</body>
+
+</html>

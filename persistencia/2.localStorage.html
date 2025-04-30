@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Notas con localStorage</title>
+</head>
+
+<body>
+  <h1>Notas (persisten con localStorage)</h1>
+  <input type="text" id="noteInput" placeholder="Escribe una nota" />
+  <button onclick="addNote()">Agregar</button>
+  <ul id="noteList"></ul>
+
+  <script>
+    let notes = JSON.parse(localStorage.getItem("notes")) || [];
+
+    function addNote() {
+      const input = document.getElementById("noteInput");
+      const note = input.value;
+      if (note) {
+        notes.push(note);
+        input.value = "";
+        localStorage.setItem("notes", JSON.stringify(notes));
+        render();
+      }
+    }
+
+    function render() {
+      const list = document.getElementById("noteList");
+      list.innerHTML = "";
+      notes.forEach((note) => {
+        const li = document.createElement("li");
+        li.textContent = note;
+        list.appendChild(li);
+      });
+    }
+
+    // Al cargar la página, mostrar las notas existentes
+    render();
+  </script>
+</body>
+
+</html>

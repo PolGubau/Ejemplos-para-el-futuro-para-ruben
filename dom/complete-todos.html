@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <form id="task-form">
+
+    <input id="task-input" type="text" placeholder="Nueva tarea" />
+    <button type="submit" id="add-task">Agregar</button>
+  </form>
+  <ul id="task-list"></ul>
+
+  <script>
+
+    const input = document.getElementById("task-input");
+    const button = document.getElementById("add-task");
+    const list = document.getElementById("task-list");
+    const form = document.getElementById("task-form");
+    let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+
+    function renderTasks() {
+      list.innerHTML = "";
+      tasks.forEach(({ task, createdAt }, index) => {
+        // create a li with a p (text), the hour created and a button to remove the task
+        const li = document.createElement("li");
+        // add a class to the li to make it look like a task
+        li.classList.add("task-item");
+
+        const p = document.createElement("p");
+        const removeButton = document.createElement("button");
+        removeButton.textContent = "Eliminar";
+        removeButton.addEventListener("click", () => {
+          tasks.splice(index, 1);
+          saveAndRender();
+        });
+        p.textContent = `${task} - ${createdAt}`;
+        li.appendChild(p);
+        li.appendChild(removeButton);
+        list.appendChild(li);
+        li.addEventListener("click", () => {
+          li.classList.toggle("completed");
+        });
+
+      });
+    }
+
+    function saveAndRender() {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      renderTasks();
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (input.value.trim()) {
+        tasks.push({
+          task: input.value,
+          createdAt: new Date().toLocaleString()
+        });
+        input.value = "";
+        saveAndRender();
+      }
+    });
+
+    renderTasks();
+  </script>
+
+</body>
+
+</html>

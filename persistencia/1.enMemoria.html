@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Datos en Memoria</title>
+</head>
+
+<body>
+  <h1>Notas (no persisten)</h1>
+  <input type="text" id="noteInput" placeholder="Escribe una nota" />
+  <button onclick="addNote()">Agregar</button>
+  <ul id="noteList"></ul>
+
+  <script>
+    let notes = [];
+
+    function addNote() {
+      const input = document.getElementById("noteInput");
+      const note = input.value;
+      if (note) {
+        notes.push(note);
+        input.value = "";
+        render();
+      }
+    }
+
+    function render() {
+      const list = document.getElementById("noteList");
+      list.innerHTML = "";
+      notes.forEach((note) => {
+        const li = document.createElement("li");
+        li.textContent = note;
+        list.appendChild(li);
+      });
+    }
+  </script>
+</body>
+
+</html>

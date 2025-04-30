@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="question"></div>
+  <div id="answers"></div>
+  <div id="result"></div>
+  <script>
+    const question = '¿Cuánto es 2 + 2?';
+      const options = [3, 4, 5];
+      const correct = 4;
+
+      document.getElementById('question').textContent = question;
+      const answersDiv = document.getElementById('answers');
+
+      options.forEach((opt) => {
+        const btn = document.createElement('button');
+        btn.textContent = opt.toString();
+        btn.addEventListener('click', () => {
+          document.getElementById('result').textContent = opt === correct ? 'Correcto ✅' : 'Incorrecto ❌';
+        });
+        answersDiv.appendChild(btn);
+      });
+  </script>
+</body>
+</html>

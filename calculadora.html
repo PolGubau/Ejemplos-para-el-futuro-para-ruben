@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora</title>
+  <style>
+    .calculadora {
+      font-family: Arial, sans-serif;
+    }
+
+    .pantalla {
+      width: 100%;
+      height: 50px;
+      font-size: 24px;
+      text-align: right;
+    }
+
+    .boton {
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .boton:hover {
+      background-color: #f0f0f0;
+    }
+
+    .text-primary {
+      color: blue;
+    }
+
+    .d-none {
+      display: none;
+    }
+
+    .list-group {
+      list-style: none;
+      padding: 0;
+    }
+
+    .list-group-item {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="calculadora">
+    <input type="text" id="pantalla" class="pantalla" readonly>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+      <button class="boton" id="btn1">1</button>
+      <button class="boton" id="btn2">2</button>
+      <button class="boton" id="btn3">3</button>
+      <button class="boton" id="btn4">4</button>
+      <button class="boton" id="btn5">5</button>
+      <button class="boton" id="btn6">6</button>
+      <button class="boton" id="btn7">7</button>
+      <button class="boton" id="btn8">8</button>
+      <button class="boton" id="btn9">9</button>
+      <button class="boton" id="btn0">0</button>
+      <button class="boton" id="btnOK">OK</button>
+      <button class="boton" id="btnCE">CE</button>
+
+      <button class="boton" id="btnPlus">+</button>
+      <button class="boton" id="btnMinus">-</button>
+      <button class="boton" id="btnEqual"
+        style="background-image: url('igual-1.png');background-position: center; background-size: cover;">=</button>
+      <button class="boton" id="btnMPlus">M+</button>
+    </div>
+    <div id="alerta" class="d-none">Los operadores ya están ocupados <span id="x-alert">X</span></div>
+    <div>
+      <p>Operador 1: <span id="operador1"></span></p>
+      <p>Operador 2: <span id="operador2"></span></p>
+      <p>Operación: <span id="operacion"></span></p>
+      <p>Resultado: <span id="resultado"></span></p>
+    </div>
+  </div>
+
+  <!-- Lista para almacenar los resultados de las operaciones -->
+  <ul id="listaResultados" class="list-group">
+    <!-- Los resultados se añadirán aquí -->
+  </ul>
+
+  <script>
+    const pantalla = document.getElementById('pantalla');
+    const operador1 = document.getElementById('operador1');
+    const operador2 = document.getElementById('operador2');
+    const operacion = document.getElementById('operacion');
+    const resultado = document.getElementById('resultado');
+    const alerta = document.getElementById('alerta');
+    const xAlert = document.getElementById('x-alert');
+    const listaResultados = document.getElementById('listaResultados');
+
+    let currentOperator = '';
+    let operator1Value = '';
+    let operator2Value = '';
+    let currentResult = '';
+
+    // Mostrar color en la pantalla cuando se está editando
+    pantalla.addEventListener('focus', () => {
+      pantalla.style.color = '#FFFF00';
+      pantalla.style.boxShadow = '0px 0px 20px #FFFF00';
+    });
+
+    pantalla.addEventListener('blur', () => {
+      pantalla.style.color = '';
+      pantalla.style.boxShadow = '';
+    });
+
+    // Botones numéricos
+    const botones = ['btn0', 'btn1', 'btn2', 'btn3', 'btn4', 'btn5', 'btn6', 'btn7', 'btn8', 'btn9'];
+    botones.forEach(id => {
+      document.getElementById(id).addEventListener('click', () => {
+        pantalla.value += document.getElementById(id).textContent;
+      });
+    });
+
+    document.getElementById("btnEqual").addEventListener("mouseenter", () => {
+      document.getElementById("btnEqual").style.backgroundImage = "url('igual-2.png')";
+    });
+
+    document.getElementById("btnEqual").addEventListener("mouseleave", () => {
+      document.getElementById("btnEqual").style.backgroundImage = "url('igual-1.png')";
+    });
+
+    // Operadores
+    document.getElementById('btnPlus').addEventListener('click', () => {
+      currentOperator = '+';
+      operacion.textContent = '+';
+    });
+
+    document.getElementById('btnMinus').addEventListener('click', () => {
+      currentOperator = '-';
+      operacion.textContent = '-';
+    });
+
+    // Botón OK
+    document.getElementById('btnOK').addEventListener('click', () => {
+      if (!operator1Value) {
+        operator1Value = pantalla.value;
+        operador1.textContent = operator1Value;
+      } else if (!operator2Value) {
+        operator2Value = pantalla.value;
+        operador2.textContent = operator2Value;
+      } else {
+        alerta.classList.remove('d-none');
+      }
+      pantalla.value = '';
+    });
+
+    // Botón CE
+    document.getElementById('btnCE').addEventListener('click', () => {
+      pantalla.value = '';
+      operador1.textContent = '';
+      operador2.textContent = '';
+      operacion.textContent = '';
+      resultado.textContent = '';
+    });
+
+    // Botón de calcular
+    document.getElementById('btnEqual').addEventListener('click', () => {
+      if (operator1Value && operator2Value && currentOperator) {
+        currentResult = eval(`${operator1Value} ${currentOperator} ${operator2Value}`);
+        resultado.textContent = currentResult;
+      }
+    });
+
+    // Cerrar alerta
+    xAlert.addEventListener('click', () => {
+      alerta.classList.add('d-none');
+    });
+
+    // Botón M+ (Agregar resultado a la lista)
+    document.getElementById('btnMPlus').addEventListener('click', () => {
+      if (currentResult) {
+        const newListItem = document.createElement('li');
+        newListItem.classList.add('list-group-item', 'text-primary');
+        newListItem.textContent = currentResult;
+        listaResultados.appendChild(newListItem);
+      }
+    });
+  </script>
+</body>
+
+</html>

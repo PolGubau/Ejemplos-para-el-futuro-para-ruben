@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Notas con API</title>
+</head>
+
+<body>
+  <h1>Notas (guardadas en servidor)</h1>
+  <input type="text" id="noteInput" placeholder="Escribe una nota" />
+  <button onclick="addNote()">Agregar</button>
+  <ul id="noteList"></ul>
+
+  <script>
+    const API_URL = "https://64f234ce0e1e60602d23e3c9.mockapi.io/notes";
+
+    async function fetchNotes() {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      render(data);
+    }
+
+    async function addNote() {
+      const input = document.getElementById("noteInput");
+      const note = input.value;
+      if (note) {
+        await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: note }),
+        });
+        input.value = "";
+        fetchNotes();
+      }
+    }
+
+    function render(notes) {
+      const list = document.getElementById("noteList");
+      list.innerHTML = "";
+      notes.forEach((note) => {
+        const li = document.createElement("li");
+        li.textContent = note.content;
+        list.appendChild(li);
+      });
+    }
+
+    // Al cargar, obtener las notas del servidor
+    fetchNotes();
+  </script>
+</body>
+
+</html>

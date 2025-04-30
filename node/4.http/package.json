@@ -1,0 +1,16 @@
+{
+  "name": "4.http",
+  "version": "1.0.0",
+  "main": "http.js",
+  "scripts": {
+    "lint": "standard"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": "",
+  "dependencies": {
+    "standard": "^17.1.2"
+  }
+}

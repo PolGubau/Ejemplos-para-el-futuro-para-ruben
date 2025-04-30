@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario de Códigos Promocionales</title>
+  <style>
+    .valido {
+      color: green;
+    }
+
+    .invalido {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Formulario de Códigos Promocionales</h1>
+  <form id="promoForm">
+    <label for="codigo">Introduce el código promocional:</label>
+    <input type="text" id="codigo" name="codigo">
+    <button type="button" id="validar">Validar</button>
+  </form>
+
+  <p id="mensaje"></p>
+  <img id="imagen" src="" alt="Imagen promocional" style="display: none;">
+  <div id="contenedor"></div>
+
+  <script>
+    const codigoInput = document.getElementById('codigo');
+    const mensaje = document.getElementById('mensaje');
+    const imagen = document.getElementById('imagen');
+    const contenedor = document.getElementById('contenedor');
+    const validarBtn = document.getElementById('validar');
+
+    // Validació del codi promocional
+    validarBtn.addEventListener('click', () => {
+      const codigo = codigoInput.value;
+      if (codigo === 'PROMO15') {
+        mensaje.textContent = 'Dispone de un descuento del 15%';
+        mensaje.className = 'valido';
+        imagen.src = 'valido.png';
+        imagen.style.display = 'block';
+        const link = document.createElement('a');
+        link.href = 'https://www.amazon.es';
+        link.textContent = 'Ir a la tienda';
+        contenedor.appendChild(link);
+      } else if (codigo === 'PROMO30') {
+        mensaje.textContent = 'Dispone de un descuento del 30%';
+        mensaje.className = 'valido';
+        imagen.src = 'valido.png';
+        imagen.style.display = 'block';
+        const link = document.createElement('a');
+        link.href = 'https://www.amazon.es';
+        link.textContent = 'Ir a la tienda';
+        contenedor.appendChild(link);
+      } else {
+        mensaje.textContent = 'El código introducido no es válido';
+        mensaje.className = 'invalido';
+        imagen.style.display = 'none';
+        contenedor.innerHTML = '';
+      }
+    });
+
+    // Efecte focus per al codi promocional
+    codigoInput.addEventListener('focus', () => {
+      codigoInput.style.backgroundColor = 'white';
+    });
+
+    codigoInput.addEventListener('blur', () => {
+      codigoInput.style.backgroundColor = '#82ccdd';
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejemplo de APIs</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    .result {
+      margin-bottom: 20px;
+    }
+
+    .result h2 {
+      color: #333;
+    }
+
+    .result p {
+      font-size: 18px;
+    }
+
+    .loader {
+      display: none;
+      margin: 20px auto;
+      font-size: 18px;
+      color: #007bff;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Mostrar resultados de dos APIs</h1>
+
+  <div class="loader" id="loader">Cargando...</div>
+
+  <div class="result" id="user-result">
+    <h2>Datos del Usuario</h2>
+    <p id="user-name">Cargando usuario...</p>
+  </div>
+
+  <div class="result" id="cat-fact">
+    <h2>Hecho Curioso sobre Gatos</h2>
+    <p id="fact">Cargando hecho...</p>
+  </div>
+
+  <button onclick="fetchData()">Recargar Datos</button>
+
+  <script>
+    async function fetchData() {
+      // Mostrar el loader mientras se cargan los datos
+      document.getElementById('loader').style.display = 'block';
+      document.getElementById('user-name').innerText = 'Cargando usuario...';
+      document.getElementById('fact').innerText = 'Cargando hecho...';
+
+      try {
+        // Realizar las peticiones a ambas APIs
+        const userResponse = await fetch('https://randomuser.me/api/');
+        const userData = await userResponse.json();
+
+        const factResponse = await fetch('https://meowfacts.herokuapp.com/');
+        const factData = await factResponse.json();
+
+        // Mostrar los resultados en la página
+        const user = userData.results[0];
+        document.getElementById('user-name').innerText = `Nombre: ${user.name.first} ${user.name.last}`;
+
+        document.getElementById('fact').innerText = `Hecho: ${factData.data[0]}`;
+
+      } catch (error) {
+        // Manejo de errores
+        document.getElementById('user-name').innerText = 'Error al cargar el usuario.';
+        document.getElementById('fact').innerText = 'Error al cargar el hecho.';
+        console.error('Error fetching data:', error);
+      } finally {
+        // Ocultar el loader después de recibir la respuesta
+        document.getElementById('loader').style.display = 'none';
+      }
+    }
+
+    // Llamar a la función para obtener los datos cuando se cargue la página
+     document.addEventListener("DOMContentLoaded", fetchData);
+
+  </script>
+</body>
+
+</html>
