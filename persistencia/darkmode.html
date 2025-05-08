@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dark Mode</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #000000;
+    }
+
+    body.dark {
+      --bg: #121212;
+      --fg: #f5f5f5;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: sans-serif;
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <button id="toggle-theme">🌙 Cambiar tema</button>
+  <script>
+    const toggle = document.getElementById('toggle-theme');
+
+    const applyTheme = (dark) => {
+
+      document.body.classList.toggle('dark', dark);
+
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    };
+
+
+
+
+    // Al cargar
+    applyTheme(localStorage.getItem('theme') === 'dark');
+
+
+
+    // Al hacer clic
+    toggle.addEventListener('click', () => {
+      const isDark = document.body.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+  </script>
+</body>
+
+</html>
